@@ -1,0 +1,25 @@
+{
+  "name": "baqsha-ai",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "deploy:worker": "turbo run deploy --filter=worker",
+    "deploy:web": "turbo run deploy --filter=web",
+    "db:migrate": "turbo run db:migrate --filter=worker",
+    "db:seed": "turbo run db:seed --filter=worker",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.70.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
