@@ -49,7 +49,7 @@ pnpm install
 npx wrangler login
 
 # Создать D1 базу
-npx wrangler d1 create baqsha-db
+npx wrangler d1 create baqsha-ai
 
 # Создать KV namespace
 npx wrangler kv namespace create CACHE

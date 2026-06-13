@@ -8,6 +8,7 @@
     "deploy:worker": "turbo run deploy --filter=worker",
     "deploy:web": "turbo run deploy --filter=web",
     "db:migrate": "turbo run db:migrate --filter=worker",
+    "db:migrate:local": "turbo run db:migrate:local --filter=worker",
     "db:seed": "turbo run db:seed --filter=worker",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck"
