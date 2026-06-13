@@ -3,7 +3,7 @@ import { CopilotRuntime, createCopilotRuntimeHandler, BuiltInAgent } from "@copi
 const runtime = new CopilotRuntime({
   agents: {
     default: new BuiltInAgent({
-      model: "openai:gpt-4o-mini",
+      model: "meta-llama/llama-3.1-8b-instruct:free",
     }),
   },
 });
