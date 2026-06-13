@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const CategorySchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   slug: z.string().min(1).max(100),
   name: z.string().min(1).max(200),
   nameEn: z.string().max(200).optional(),
   nameKk: z.string().max(200).optional(),
-  parentId: z.string().uuid().nullable(),
+  parentId: z.string().nullable(),
   sortOrder: z.number().int().default(0),
   isActive: z.boolean().default(true),
   createdAt: z.number().int(),
@@ -16,9 +16,9 @@ export const CategorySchema = z.object({
 export type Category = z.infer<typeof CategorySchema>;
 
 export const ProductSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   sku: z.string().min(1).max(100),
-  categoryId: z.string().uuid(),
+  categoryId: z.string(),
   name: z.string().min(1).max(200),
   nameEn: z.string().max(200).optional(),
   nameKk: z.string().max(200).optional(),
@@ -44,7 +44,7 @@ export const ProductWithCategorySchema = ProductSchema.extend({
 export type ProductWithCategory = z.infer<typeof ProductWithCategorySchema>;
 
 export const UserSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   email: z.string().email(),
   passwordHash: z.string(),
   name: z.string().max(200).optional(),
@@ -57,8 +57,8 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 
 export const SessionSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.string(),
+  userId: z.string(),
   expiresAt: z.number().int(),
   createdAt: z.number().int(),
 });
@@ -66,7 +66,7 @@ export const SessionSchema = z.object({
 export type Session = z.infer<typeof SessionSchema>;
 
 export const CartItemSchema = z.object({
-  productId: z.string().uuid(),
+  productId: z.string(),
   quantity: z.number().int().positive(),
   priceMinor: z.number().int().positive(),
   name: z.string(),
@@ -78,8 +78,8 @@ export const CartItemSchema = z.object({
 export type CartItem = z.infer<typeof CartItemSchema>;
 
 export const CartSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.string(),
+  userId: z.string(),
   items: z.array(CartItemSchema).default([]),
   updatedAt: z.number().int(),
 });
@@ -87,7 +87,7 @@ export const CartSchema = z.object({
 export type Cart = z.infer<typeof CartSchema>;
 
 export const OrderItemSchema = z.object({
-  productId: z.string().uuid(),
+  productId: z.string(),
   name: z.string(),
   nameEn: z.string().optional(),
   nameKk: z.string().optional(),
@@ -110,9 +110,9 @@ export const OrderStatusSchema = z.enum([
 export type OrderStatus = z.infer<typeof OrderStatusSchema>;
 
 export const OrderSchema = z.object({
-  id: z.string().uuid(),
-  idempotencyKey: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.string(),
+  idempotencyKey: z.string(),
+  userId: z.string(),
   status: OrderStatusSchema.default("created"),
   items: z.array(OrderItemSchema),
   totalMinor: z.number().int().positive(),
@@ -134,21 +134,21 @@ export const CreateCategoryInputSchema = z.object({
   name: z.string().min(1).max(200),
   nameEn: z.string().max(200).optional(),
   nameKk: z.string().max(200).optional(),
-  parentId: z.string().uuid().optional(),
+  parentId: z.string().optional(),
   sortOrder: z.number().int().default(0),
 });
 
 export type CreateCategoryInput = z.infer<typeof CreateCategoryInputSchema>;
 
 export const UpdateCategoryInputSchema = CreateCategoryInputSchema.partial().extend({
-  id: z.string().uuid(),
+  id: z.string(),
 });
 
 export type UpdateCategoryInput = z.infer<typeof UpdateCategoryInputSchema>;
 
 export const CreateProductInputSchema = z.object({
   sku: z.string().min(1).max(100),
-  categoryId: z.string().uuid(),
+  categoryId: z.string(),
   name: z.string().min(1).max(200),
   nameEn: z.string().max(200).optional(),
   nameKk: z.string().max(200).optional(),
@@ -165,13 +165,13 @@ export const CreateProductInputSchema = z.object({
 export type CreateProductInput = z.infer<typeof CreateProductInputSchema>;
 
 export const UpdateProductInputSchema = CreateProductInputSchema.partial().extend({
-  id: z.string().uuid(),
+  id: z.string(),
 });
 
 export type UpdateProductInput = z.infer<typeof UpdateProductInputSchema>;
 
 export const CreateOrderInputSchema = z.object({
-  idempotencyKey: z.string().uuid(),
+  idempotencyKey: z.string(),
   deliveryAddress: z.string().min(1).max(500),
   contactPhone: z.string().min(1).max(50),
   notes: z.string().optional(),
@@ -180,7 +180,7 @@ export const CreateOrderInputSchema = z.object({
 export type CreateOrderInput = z.infer<typeof CreateOrderInputSchema>;
 
 export const UpdateOrderStatusInputSchema = z.object({
-  orderId: z.string().uuid(),
+  orderId: z.string(),
   status: OrderStatusSchema,
 });
 
@@ -217,7 +217,7 @@ export const PaginationSchema = z.object({
 export type Pagination = z.infer<typeof PaginationSchema>;
 
 export const ProductFiltersSchema = z.object({
-  categoryId: z.string().uuid().optional(),
+  categoryId: z.string().optional(),
   inStockOnly: z.boolean().default(true),
   search: z.string().optional(),
   minPrice: z.number().int().optional(),
