@@ -63,18 +63,6 @@ export default function Home() {
     }).format(priceMinor / 100);
   };
 
-  const handleAddToCart = (product: Product) => {
-    addToCart({
-      productId: product.id,
-      name: product.name,
-      priceMinor: product.priceMinor,
-      quantity: 1,
-      package: product.package,
-      unit: product.unit,
-      mediaKeys: product.mediaKeys,
-    });
-  };
-
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -185,12 +173,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                formatPrice={formatPrice}
-                onAddToCart={() => handleAddToCart(product)}
-              />
+              <ProductCard key={product.id} product={product} formatPrice={formatPrice} />
             ))}
           </div>
         )}
