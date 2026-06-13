@@ -1,0 +1,41 @@
+# Nuxt dev/build outputs
+.output
+.data
+.data.db
+data.db
+.next
+.nitro
+.cache
+dist
+
+# Test outputs
+test-results
+playwright-report
+coverage
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# VSC
+.history
+
+.gstack
+
+.wrangler
+.tmp
+.playwright-mcp
