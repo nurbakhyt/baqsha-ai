@@ -8,12 +8,12 @@ name = "baqsha-worker-prod"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "baqsha-db"
-database_id = "your-d1-database-id"
+database_name = "baqsha-ai"
+database_id = "cbcc44ed-f9bd-4a03-ad13-82117b2787a9"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = "your-kv-namespace-id"
+id = "06f9bfa657974faeb4d6598c88bf6b0e"
 preview_id = "your-preview-kv-id"
 
 [[r2_buckets]]
