@@ -38,10 +38,14 @@ export const useStore = create<StoreState>((set) => ({
     set((state) => {
       const existing = state.cart.find((i) => i.productId === item.productId);
       if (existing) {
+        const newQty = existing.quantity + item.quantity;
+        if (newQty <= 0) {
+          return { cart: state.cart.filter((i) => i.productId !== item.productId) };
+        }
         return {
           cart: state.cart.map((i) =>
             i.productId === item.productId
-              ? { ...i, quantity: i.quantity + item.quantity }
+              ? { ...i, quantity: newQty }
               : i
           ),
         };
