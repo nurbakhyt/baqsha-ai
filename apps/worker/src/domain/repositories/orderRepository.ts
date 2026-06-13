@@ -129,16 +129,16 @@ export class OrderRepository {
       userId: row.user_id,
       status: row.status,
       items: typeof row.items === "string" ? JSON.parse(row.items) : row.items,
-      totalMinor: row.total_minor,
+      totalMinor: Number(row.total_minor),
       deliveryAddress: row.delivery_address,
       contactPhone: row.contact_phone,
       notes: row.notes,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
-      paidAt: row.paid_at,
-      shippedAt: row.shipped_at,
-      deliveredAt: row.delivered_at,
-      cancelledAt: row.cancelled_at,
+      createdAt: Number(row.created_at),
+      updatedAt: Number(row.updated_at),
+      paidAt: row.paid_at != null ? Number(row.paid_at) : undefined,
+      shippedAt: row.shipped_at != null ? Number(row.shipped_at) : undefined,
+      deliveredAt: row.delivered_at != null ? Number(row.delivered_at) : undefined,
+      cancelledAt: row.cancelled_at != null ? Number(row.cancelled_at) : undefined,
     });
   }
 }

@@ -188,14 +188,14 @@ export class ProductRepository {
       description: row.description,
       descriptionEn: row.description_en,
       descriptionKk: row.description_kk,
-      priceMinor: row.price_minor,
-      stock: row.stock,
+      priceMinor: Number(row.price_minor),
+      stock: Number(row.stock),
       package: row.package,
       unit: row.unit,
       mediaKeys: typeof row.media_keys === "string" ? JSON.parse(row.media_keys) : row.media_keys,
       isActive: Boolean(row.is_active),
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: Number(row.created_at),
+      updatedAt: Number(row.updated_at),
     });
   }
 }

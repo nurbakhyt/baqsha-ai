@@ -64,8 +64,8 @@ export class UserRepository {
       name: row.name,
       phone: row.phone,
       role: row.role,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: Number(row.created_at),
+      updatedAt: Number(row.updated_at),
     });
   }
 }

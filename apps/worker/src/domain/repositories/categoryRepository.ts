@@ -106,10 +106,10 @@ export class CategoryRepository {
       nameEn: row.name_en,
       nameKk: row.name_kk,
       parentId: row.parent_id,
-      sortOrder: row.sort_order,
+      sortOrder: Number(row.sort_order),
       isActive: Boolean(row.is_active),
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      createdAt: Number(row.created_at),
+      updatedAt: Number(row.updated_at),
     });
   }
 }

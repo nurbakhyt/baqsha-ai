@@ -37,7 +37,7 @@ export class CartRepository {
       id: row.id,
       userId: row.user_id,
       items: typeof row.items === "string" ? JSON.parse(row.items) : row.items,
-      updatedAt: row.updated_at,
+      updatedAt: Number(row.updated_at),
     });
   }
 }
