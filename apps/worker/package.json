@@ -7,9 +7,10 @@
     "dev": "wrangler dev --port 8787",
     "build": "wrangler deploy --dry-run --outdir=dist",
     "deploy": "wrangler deploy",
-    "db:migrate": "wrangler d1 migrations apply baqsha-db --remote",
-    "db:migrate:local": "wrangler d1 migrations apply baqsha-db --local",
-    "db:seed": "wrangler d1 execute baqsha-db --remote --file=./seeds.sql",
+    "db:migrate": "wrangler d1 migrations apply baqsha-ai --remote",
+    "db:migrate:local": "wrangler d1 migrations apply baqsha-ai --local",
+    "db:seed": "wrangler d1 execute baqsha-ai --remote --file=./seeds.sql",
+    "db:seed:local": "wrangler d1 execute baqsha-ai --local --file=./seeds.sql",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
   },
