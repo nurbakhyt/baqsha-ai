@@ -25,7 +25,7 @@ binding = "AI"
 
 [vars]
 APP_NAME = "Baqsha.AI"
-CORS_ORIGIN = "https://baqsha-ai.nurbakhyt.workers.dev"
+CORS_ORIGIN = "https://baqsha-worker.nurbakhyt.workers.dev"
 
 [observability]
 enabled = false
