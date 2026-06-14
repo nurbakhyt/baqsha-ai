@@ -107,11 +107,11 @@ export class ProductRepository {
     };
 
     await this.db.prepare(`
-      INSERT INTO products (id, sku, category_id, name, name_en, name_kk, description, description_en, description_kk, price_minor, stock, package, unit, media_keys, is_active, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO products (id, sku, category_id, name, name_en, name_kk, name_ru, description, description_en, description_kk, description_ru, price_minor, stock, package, unit, media_keys, is_active, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
-      id, product.sku, product.categoryId, product.name, product.nameEn, product.nameKk,
-      product.description, product.descriptionEn, product.descriptionKk,
+      id, product.sku, product.categoryId, product.name, product.nameEn, product.nameKk, product.nameRu,
+      product.description, product.descriptionEn, product.descriptionKk, product.descriptionRu,
       product.priceMinor, product.stock, product.package, product.unit,
       JSON.stringify(product.mediaKeys), 1, timestamp, timestamp
     ).run();
@@ -143,13 +143,13 @@ export class ProductRepository {
     };
 
     await this.db.prepare(`
-      UPDATE products SET sku = ?, category_id = ?, name = ?, name_en = ?, name_kk = ?,
-      description = ?, description_en = ?, description_kk = ?,
+      UPDATE products SET sku = ?, category_id = ?, name = ?, name_en = ?, name_kk = ?, name_ru = ?,
+      description = ?, description_en = ?, description_kk = ?, description_ru = ?,
       price_minor = ?, stock = ?, package = ?, unit = ?, media_keys = ?, is_active = ?, updated_at = ?
       WHERE id = ?
     `).bind(
-      updated.sku, updated.categoryId, updated.name, updated.nameEn, updated.nameKk,
-      updated.description, updated.descriptionEn, updated.descriptionKk,
+      updated.sku, updated.categoryId, updated.name, updated.nameEn, updated.nameKk, updated.nameRu,
+      updated.description, updated.descriptionEn, updated.descriptionKk, updated.descriptionRu,
       updated.priceMinor, updated.stock, updated.package, updated.unit,
       JSON.stringify(updated.mediaKeys), updated.isActive ? 1 : 0, updated.updatedAt, input.id
     ).run();
@@ -185,9 +185,11 @@ export class ProductRepository {
       name: row.name,
       nameEn: row.name_en,
       nameKk: row.name_kk,
+      nameRu: row.name_ru,
       description: row.description,
       descriptionEn: row.description_en,
       descriptionKk: row.description_kk,
+      descriptionRu: row.description_ru,
       priceMinor: Number(row.price_minor),
       stock: Number(row.stock),
       package: row.package,
