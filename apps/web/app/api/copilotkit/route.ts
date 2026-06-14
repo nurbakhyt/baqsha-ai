@@ -1,20 +1,14 @@
-import { CopilotRuntime, createCopilotRuntimeHandler, BuiltInAgent } from "@copilotkit/runtime/v2";
+import { CopilotRuntime, copilotRuntimeNextJSAppRouterEndpoint } from "@copilotkit/runtime";
+import { createWorkersAIAdapter } from "@/lib/workers-ai-adapter";
 
-const runtime = new CopilotRuntime({
-  agents: {
-    default: new BuiltInAgent({
-      model: "meta-llama/llama-3.1-8b-instruct:free",
-    }),
-  },
-});
+const runtime = new CopilotRuntime({});
 
-const handler = createCopilotRuntimeHandler({
+const endpoint = copilotRuntimeNextJSAppRouterEndpoint({
   runtime,
-  basePath: "/api/copilotkit",
-  mode: "single-route",
-  cors: true,
+  serviceAdapter: createWorkersAIAdapter(),
+  endpoint: "/api/copilotkit",
 });
 
 export async function POST(req: Request) {
-  return await handler(req);
+  return endpoint.handleRequest(req);
 }

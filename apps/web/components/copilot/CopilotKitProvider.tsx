@@ -9,7 +9,6 @@ export function CopilotKitProvider({ children }: { children: React.ReactNode }) 
   return (
     <CopilotKit
       runtimeUrl="/api/copilotkit"
-      publicLicenseKey=""
     >
       <CopilotTools />
       <CopilotSidebar
@@ -19,11 +18,6 @@ export function CopilotKitProvider({ children }: { children: React.ReactNode }) 
           initial:
             "Привет! Я ваш помощник по заказу свежих фруктов и овощей. Чем могу помочь?",
         }}
-        suggestions={[
-          { title: "Каталог", message: "Покажи товары" },
-          { title: "Корзина", message: "Что в корзине?" },
-          { title: "Поиск", message: "Найди лимон" },
-        ]}
       >
         {children}
       </CopilotSidebar>
