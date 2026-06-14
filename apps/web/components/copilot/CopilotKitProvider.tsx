@@ -16,7 +16,7 @@ export function CopilotKitProvider({ children }: { children: React.ReactNode }) 
         labels={{
           title: "Baqsha.AI Ассистент",
           initial:
-            "Привет! Я ваш помощник по заказу свежих фруктов и овощей. Чем могу помочь?",
+            "Я ваш помощник по заказу свежих фруктов и овощей. Чем могу помочь?",
         }}
       >
         {children}
