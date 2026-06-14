@@ -16,6 +16,4 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: pnpm install
-      - name: Debug secret
-        run: echo "Token is set: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}"
       - run: pnpm deploy:worker
