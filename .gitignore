@@ -40,3 +40,4 @@ logs
 .wrangler
 .tmp
 .playwright-mcp
+.turbo
