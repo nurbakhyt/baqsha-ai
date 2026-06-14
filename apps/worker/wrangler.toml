@@ -25,5 +25,8 @@ binding = "AI"
 
 [vars]
 APP_NAME = "Baqsha.AI"
-JWT_SECRET = "your-jwt-secret-min-32-chars"
-CORS_ORIGIN = "https://baqsha.ai"
+CORS_ORIGIN = "https://baqsha-ai.nurbakhyt.pages.dev"
+
+[observability.logs]
+enabled = true
+invocation_logs = true
