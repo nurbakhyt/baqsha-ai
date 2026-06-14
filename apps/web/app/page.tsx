@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/generative/ProductCard";
 import { useStore } from "@/lib/hooks/useStore";
+import { apiFetch } from "@/lib/api";
 
 interface Product {
   id: string;
@@ -37,8 +38,8 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/catalog/products").then((r) => r.json()),
-      fetch("/api/catalog/categories").then((r) => r.json()),
+      apiFetch("/api/catalog/products"),
+      apiFetch("/api/catalog/categories"),
     ]).then(([productsRes, categoriesRes]) => {
       setProducts(productsRes.data || []);
       setCategories(categoriesRes.data || []);

@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useCopilotAction, useCopilotReadable, useCopilotAdditionalInstructions } from "@copilotkit/react-core";
 import { useStore } from "@/lib/hooks/useStore";
+import { apiFetch } from "@/lib/api";
 
 interface CatalogProduct {
   id: string;
@@ -155,8 +156,7 @@ export function CopilotTools() {
   const [products, setProducts] = useState<CatalogProduct[]>([]);
 
   useEffect(() => {
-    fetch("/api/catalog/products")
-      .then((r) => r.json())
+    apiFetch("/api/catalog/products")
       .then((d) => setProducts(d.data || []))
       .catch(() => {});
   }, []);
@@ -192,8 +192,7 @@ export function CopilotTools() {
     ],
     handler: async ({ productName, quantity }: any) => {
       const qty = Number(quantity) || 1;
-      const res = await fetch(`/api/catalog/products`);
-      const data = await res.json();
+      const data = await apiFetch(`/api/catalog/products`);
       const product = findProduct(data.data || [], productName);
       if (!product) return `Товар "${productName}" не найден в каталоге`;
       addToCart({
