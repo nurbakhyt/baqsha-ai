@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   transpilePackages: ["@baqsha/shared"],
   images: {
     remotePatterns: [
@@ -8,14 +9,7 @@ const nextConfig = {
         hostname: "*.r2.cloudflarestorage.com",
       },
     ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path((?!copilotkit).*)",
-        destination: "http://localhost:8787/api/:path*",
-      },
-    ];
+    unoptimized: true,
   },
 };
 
