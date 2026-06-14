@@ -10,8 +10,7 @@
 
 ### Deploy flow
 1. PR → merge в main
-2. Cloudflare Pages автоматически:
-   - Собирает фронт (`pnpm build --filter=web`)
-   - Деплоит воркер (`cd apps/worker && npx wrangler deploy`)
-3. Фронт: https://baqsha-ai.nurbakhyt.pages.dev
-4. API: https://baqsha-worker.nurbakhyt.workers.dev
+2. Cloudflare Pages автоматически деплоит фронт
+3. GitHub Action автоматически деплоит воркер (через `npx wrangler deploy`)
+4. Фронт: https://baqsha-ai.nurbakhyt.pages.dev
+5. API: https://baqsha-worker.nurbakhyt.workers.dev
