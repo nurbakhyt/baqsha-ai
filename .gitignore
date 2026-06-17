@@ -41,3 +41,8 @@ logs
 .tmp
 .playwright-mcp
 .turbo
+_next
+out
+
+# Vercel
+.vercel

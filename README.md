@@ -2,6 +2,8 @@
 
 AI-first платформа для доставки свежих фруктов и овощей на дом.
 
+**Demo:** https://baqsha-web.pages.dev
+
 ## Архитектура
 
 ```
@@ -83,6 +85,22 @@ pnpm dev
 # Web: http://localhost:3000
 ```
 
+### 6. Настройка AI (CopilotKit + OpenRouter)
+
+```bash
+# Получить API ключ на https://openrouter.ai/keys
+cd apps/worker
+echo 'sk-or-v1-...' | npx wrangler secret put OPENROUTER_API_KEY
+echo 'openrouter/free' | npx wrangler secret put OPENROUTER_MODEL
+```
+
+**Бесплатные модели:**
+- `openrouter/free` — автоматический выбор бесплатной модели
+- `meta-llama/llama-3.3-70b-instruct:free` — стабильная модель с tool calling
+- `nvidia/nemotron-3-super-120b-a12b:free` — быстрая модель
+
+**Лимиты бесплатного тарифа:** 20 запросов/мин, 50 запросов/день. С кредитом $5+ лимиты вырастают.
+
 ## API Endpoints
 
 ### Auth
@@ -122,16 +140,24 @@ pnpm dev
 - `PUT /api/admin/orders/:id/status` — изменить статус заказа
 
 ### CopilotKit
-- `POST /api/copilotkit` — AI агент
+- `POST /api/copilotkit` — AI агент (GraphQL endpoint)
 
 ## AI Agents
 
-### ShopperAssistant
+### ShopperAssistant (CopilotKit)
 Помогает покупателям:
-- Искать товары
-- Добавлять в корзину
-- Оформлять заказы
-- Отслеживать доставку
+- Искать товары по каталогу
+- Добавлять в корзину (`addToCart`)
+- Показывать корзину (`showCart`)
+- Удалять товары (`removeFromCart`)
+- Очищать корзину (`clearCart`)
+
+**Реализация:**
+- Frontend: `apps/web/components/copilot/CopilotTools.tsx` — инструменты через `useCopilotAction`
+- Runtime: `apps/worker/src/routes/copilot.ts` — CopilotKit v1.8.13 на Cloudflare Workers
+- AI Provider: OpenRouter (`openrouter/free` — автоматический выбор бесплатных моделей)
+- Протокол: GraphQL (graphql-yoga) с `@copilotkit/runtime-client-gql`
+- Язык: русский + казахский (нормализация кириллицы для поиска товаров)
 
 ### AdminAssistant
 Помогает админам:
@@ -146,7 +172,7 @@ pnpm dev
 - **Database**: Cloudflare D1 (SQLite)
 - **Cache**: Cloudflare KV
 - **Storage**: Cloudflare R2
-- **AI**: CopilotKit + OpenAI
+- **AI**: CopilotKit + OpenRouter
 - **State**: Zustand
 
 ## Лицензия

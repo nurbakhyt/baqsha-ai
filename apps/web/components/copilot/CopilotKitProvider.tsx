@@ -8,7 +8,7 @@ import { CopilotTools } from "./CopilotTools";
 export function CopilotKitProvider({ children }: { children: React.ReactNode }) {
   return (
     <CopilotKit
-      runtimeUrl="/api/copilotkit"
+      runtimeUrl={`${process.env.NEXT_PUBLIC_API_URL || "https://baqsha-worker.nurbakhyt.workers.dev"}/api/copilotkit`}
     >
       <CopilotTools />
       <CopilotSidebar

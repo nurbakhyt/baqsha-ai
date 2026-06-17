@@ -5,6 +5,7 @@ import catalog from "./routes/catalog";
 import cart from "./routes/cart";
 import orders from "./routes/orders";
 import adminRoutes from "./routes/admin";
+import copilot from "./routes/copilot";
 import { authMiddleware, adminGuard, AuthEnv } from "./middleware/auth";
 
 type Bindings = {
@@ -27,7 +28,7 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 app.use("*", cors({
   origin: (origin) => origin,
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowHeaders: ["Content-Type", "Authorization"],
+  allowHeaders: ["Content-Type", "Authorization", "x-copilotkit-runtime-client-gql-version"],
   credentials: true,
 }));
 
@@ -37,6 +38,7 @@ app.get("/health", (c) => c.json({ status: "ok", name: "Baqsha.AI", timestamp: D
 // Public routes
 app.route("/api/auth", auth);
 app.route("/api/catalog", catalog);
+app.route("/api/copilotkit", copilot);
 
 // Protected routes (require auth)
 app.use("/api/cart/*", authMiddleware);

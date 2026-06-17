@@ -13,7 +13,7 @@ Baqsha.AI is an AI-first B2C e-commerce platform for home delivery of fresh frui
 | Database | Cloudflare D1 (SQLite) |
 | Cache | Cloudflare KV |
 | Storage | Cloudflare R2 |
-| AI | CopilotKit + OpenAI |
+| AI | CopilotKit + OpenRouter |
 | State | Zustand |
 | Monorepo | Turborepo + pnpm workspaces |
 | Validation | Zod |
@@ -120,7 +120,7 @@ cancelled  cancelled
 
 - IDs: UUID v4 (`crypto.randomUUID()`)
 - Timestamps: Unix milliseconds (`Date.now()`)
-- Prices: Minor units (tiyin/kopek) as integers
+- Prices: minor units doesn't matter
 - Enums: String values in CHECK constraints
 - JSON fields: Serialized strings in D1
 
@@ -168,6 +168,8 @@ await cache.invalidateProducts();  // or invalidateCategories()
 | `AI` | Workers AI binding |
 | `JWT_SECRET` | Min 32 chars |
 | `CORS_ORIGIN` | Frontend URL |
+| `OPENROUTER_API_KEY` | OpenRouter API key (secret) |
+| `OPENROUTER_MODEL` | Model name (default: `openrouter/free`) |
 
 ### Web (.env.local)
 
