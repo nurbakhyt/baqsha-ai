@@ -54,8 +54,8 @@ INSERT OR REPLACE INTO products (id, sku, category_id, name, name_en, name_kk, n
 
 -- Admin user (password: admin123, SHA-256 hash)
 INSERT OR REPLACE INTO users (id, email, password_hash, name, phone, role, created_at, updated_at) VALUES
-('usr-admin-001', 'admin@baqsha.kz', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Admin', '+77001234567', 'admin', 1718361600000, 1718361600000);
+('usr-admin-001', 'admin@baqsha.kz', 'pbkdf2:100000:523d0cdd76ed794e92ea3f9993bfe653:1138e4d64bd32a06b202a3678f7bc9516d8ca50fa42c5975884f93ebf6c2efaf', 'Admin', '+77001234567', 'admin', 1718361600000, 1718361600000);
 
 -- Test customer (password: customer123, SHA-256 hash)
 INSERT OR REPLACE INTO users (id, email, password_hash, name, phone, role, created_at, updated_at) VALUES
-('usr-cust-001', 'customer@example.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Customer', '+77009876543', 'customer', 1718361600000, 1718361600000);
+('usr-cust-001', 'customer@example.com', 'pbkdf2:100000:4a59b071e03d521796c89d0a684dcb1f:5568ae6e712e700ce0c7ede6c19d173cdcfbd10767854ec862cfe6a1b794b0d4', 'Customer', '+77009876543', 'customer', 1718361600000, 1718361600000);

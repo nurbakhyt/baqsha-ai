@@ -46,3 +46,6 @@ out
 
 # Vercel
 .vercel
+
+# Cloudflare Worker secrets
+.dev.vars

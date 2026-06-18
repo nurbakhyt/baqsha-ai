@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { setToken } from "@/lib/api";
 
 interface User {
   id: string;
@@ -26,6 +27,7 @@ interface StoreState {
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
+  login: (user: User, token: string) => void;
   logout: () => void;
 }
 
@@ -57,5 +59,12 @@ export const useStore = create<StoreState>((set) => ({
       cart: state.cart.filter((i) => i.productId !== productId),
     })),
   clearCart: () => set({ cart: [] }),
-  logout: () => set({ user: null, cart: [] }),
+  login: (user, token) => {
+    setToken(token);
+    set({ user });
+  },
+  logout: () => {
+    setToken(null);
+    set({ user: null, cart: [] });
+  },
 }));
