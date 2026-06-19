@@ -2,8 +2,9 @@ import { Hono } from "hono";
 import { UserRepository } from "../domain/repositories/userRepository";
 import { SessionRepository } from "../domain/repositories/sessionRepository";
 import { RegisterInputSchema, LoginInputSchema } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const auth = new Hono();
+const auth = new Hono<AppEnv>();
 
 auth.post("/register", async (c) => {
   const body = await c.req.json();
@@ -88,16 +89,55 @@ auth.get("/me", async (c) => {
   });
 });
 
+const ITERATIONS = 100_000;
+const KEY_LENGTH = 32;
+const SALT_LENGTH = 16;
+const PREFIX = "pbkdf2:";
+
 async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  const salt = crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations: ITERATIONS, hash: "SHA-256" },
+    key,
+    KEY_LENGTH * 8,
+  );
+  const hash = Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, "0")).join("");
+  const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join("");
+  return `${PREFIX}${ITERATIONS}:${saltHex}:${hash}`;
 }
 
-async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const passwordHash = await hashPassword(password);
-  return passwordHash === hash;
+async function verifyPassword(password: string, stored: string): Promise<boolean> {
+  if (!stored.startsWith(PREFIX)) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+    return hex === stored;
+  }
+  const [, iterationsStr, saltHex, expectedHash] = stored.split(":");
+  const iterations = Number(iterationsStr);
+  const salt = new Uint8Array(saltHex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations, hash: "SHA-256" },
+    key,
+    KEY_LENGTH * 8,
+  );
+  const hash = Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, "0")).join("");
+  return hash === expectedHash;
 }
 
 export default auth;

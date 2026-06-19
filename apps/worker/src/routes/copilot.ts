@@ -48,6 +48,10 @@ async function getHandler(env: Env) {
 
 copilot.all("/", async (c) => {
   try {
+    if (!c.env.OPENROUTER_API_KEY) {
+      return c.json({ success: false, error: "OPENROUTER_API_KEY not configured" }, 500);
+    }
+
     const endpoint = await getHandler(c.env as Env);
 
     const response = await endpoint.handleRequest(c.req.raw);

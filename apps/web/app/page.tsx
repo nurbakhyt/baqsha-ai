@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/generative/ProductCard";
+import { LoginModal } from "@/components/LoginModal";
 import { useStore } from "@/lib/hooks/useStore";
 import { apiFetch } from "@/lib/api";
 
@@ -31,10 +32,13 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
+  const user = useStore((s) => s.user);
   const cart = useStore((s) => s.cart);
   const addToCart = useStore((s) => s.addToCart);
   const removeFromCart = useStore((s) => s.removeFromCart);
+  const logout = useStore((s) => s.logout);
 
   useEffect(() => {
     Promise.all([
@@ -89,9 +93,26 @@ export default function Home() {
                 </span>
               )}
             </button>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <a href="/orders" className="text-sm text-primary-600 hover:text-primary-700 transition-colors">Мои заказы</a>
+                <span className="text-gray-300">|</span>
+                <span className="text-sm text-gray-600">{user.name || user.email}</span>
+                <button onClick={logout} className="text-sm text-gray-500 hover:text-gray-700 transition-colors">Выйти</button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setLoginOpen(true)}
+                className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+              >
+                Войти
+              </button>
+            )}
           </div>
         </div>
       </header>
+
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
 
       {/* Cart dropdown */}
       {cartOpen && cart.length > 0 && (

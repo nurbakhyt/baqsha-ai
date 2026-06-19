@@ -3,8 +3,9 @@ import { ProductRepository } from "../domain/repositories/productRepository";
 import { CategoryRepository } from "../domain/repositories/categoryRepository";
 import { CacheService } from "../services/cache";
 import { ProductFiltersSchema, PaginationSchema } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const catalog = new Hono();
+const catalog = new Hono<AppEnv>();
 
 catalog.get("/categories", async (c) => {
   const cache = new CacheService(c.env.CACHE);

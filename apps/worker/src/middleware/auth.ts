@@ -1,14 +1,9 @@
-import { Context, Next } from "hono";
+import type { MiddlewareHandler } from "hono";
 import { SessionRepository } from "../domain/repositories/sessionRepository";
 import { UserRepository } from "../domain/repositories/userRepository";
+import type { AppEnv } from "../types";
 
-export interface AuthEnv {
-  DB: any;
-  CACHE: any;
-  JWT_SECRET: string;
-}
-
-export async function authMiddleware(c: Context<AuthEnv>, next: Next) {
+export const authMiddleware: MiddlewareHandler<AppEnv> = async (c, next) => {
   const authHeader = c.req.header("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return c.json({ success: false, error: "Missing or invalid Authorization header" }, 401);
@@ -36,17 +31,17 @@ export async function authMiddleware(c: Context<AuthEnv>, next: Next) {
   c.set("user", user);
   c.set("session", session);
   await next();
-}
+};
 
-export async function adminGuard(c: Context<AuthEnv>, next: Next) {
+export const adminGuard: MiddlewareHandler<AppEnv> = async (c, next) => {
   const user = c.get("user");
   if (!user || user.role !== "admin") {
     return c.json({ success: false, error: "Admin access required" }, 403);
   }
   await next();
-}
+};
 
-export async function optionalAuthMiddleware(c: Context<AuthEnv>, next: Next) {
+export const optionalAuthMiddleware: MiddlewareHandler<AppEnv> = async (c, next) => {
   const authHeader = c.req.header("Authorization");
   if (authHeader?.startsWith("Bearer ")) {
     const token = authHeader.slice(7);
@@ -63,4 +58,4 @@ export async function optionalAuthMiddleware(c: Context<AuthEnv>, next: Next) {
     }
   }
   await next();
-}
+};
