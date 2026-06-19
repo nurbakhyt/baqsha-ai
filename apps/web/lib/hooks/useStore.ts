@@ -25,6 +25,7 @@ interface StoreState {
   setUser: (user: User | null) => void;
   setCart: (cart: CartItem[]) => void;
   addToCart: (item: CartItem) => void;
+  updateQuantity: (productId: string, delta: number) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
   login: (user: User, token: string) => void;
@@ -54,6 +55,19 @@ export const useStore = create<StoreState>((set) => ({
       }
       return { cart: [...state.cart, item] };
     }),
+  updateQuantity: (productId, delta) =>
+    set((state) => ({
+      cart: state.cart.reduce<CartItem[]>((acc, item) => {
+        if (item.productId !== productId) {
+          acc.push(item);
+          return acc;
+        }
+        const newQty = item.quantity + delta;
+        if (newQty <= 0) return acc;
+        acc.push({ ...item, quantity: newQty });
+        return acc;
+      }, []),
+    })),
   removeFromCart: (productId) =>
     set((state) => ({
       cart: state.cart.filter((i) => i.productId !== productId),

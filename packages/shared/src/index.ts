@@ -144,6 +144,7 @@ export type CreateCategoryInput = z.infer<typeof CreateCategoryInputSchema>;
 
 export const UpdateCategoryInputSchema = CreateCategoryInputSchema.partial().extend({
   id: z.string(),
+  isActive: z.boolean().optional(),
 });
 
 export type UpdateCategoryInput = z.infer<typeof UpdateCategoryInputSchema>;
@@ -168,12 +169,21 @@ export type CreateProductInput = z.infer<typeof CreateProductInputSchema>;
 
 export const UpdateProductInputSchema = CreateProductInputSchema.partial().extend({
   id: z.string(),
+  isActive: z.boolean().optional(),
 });
 
 export type UpdateProductInput = z.infer<typeof UpdateProductInputSchema>;
 
+export const CreateOrderItemInputSchema = z.object({
+  productId: z.string(),
+  quantity: z.number().int().positive(),
+});
+
+export type CreateOrderItemInput = z.infer<typeof CreateOrderItemInputSchema>;
+
 export const CreateOrderInputSchema = z.object({
   idempotencyKey: z.string(),
+  items: z.array(CreateOrderItemInputSchema).min(1),
   deliveryAddress: z.string().min(1).max(500),
   contactPhone: z.string().min(1).max(50),
   notes: z.string().optional(),
@@ -226,7 +236,7 @@ export const ProductFiltersSchema = z.object({
   maxPrice: z.number().int().optional(),
 });
 
-export type ProductFilters = z.infer<typeof ProductFiltersSchema>;
+export type ProductFilters = z.input<typeof ProductFiltersSchema>;
 
 export const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({

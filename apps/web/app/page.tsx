@@ -95,6 +95,8 @@ export default function Home() {
             </button>
             {user ? (
               <div className="flex items-center gap-2">
+                <a href="/orders" className="text-sm text-primary-600 hover:text-primary-700 transition-colors">Мои заказы</a>
+                <span className="text-gray-300">|</span>
                 <span className="text-sm text-gray-600">{user.name || user.email}</span>
                 <button onClick={logout} className="text-sm text-gray-500 hover:text-gray-700 transition-colors">Выйти</button>
               </div>

@@ -4,8 +4,9 @@ import { ProductRepository } from "../domain/repositories/productRepository";
 import { OrderRepository } from "../domain/repositories/orderRepository";
 import { CacheService } from "../services/cache";
 import { CreateCategoryInputSchema, UpdateCategoryInputSchema, CreateProductInputSchema, UpdateProductInputSchema, UpdateOrderStatusInputSchema } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const admin = new Hono();
+const admin = new Hono<AppEnv>();
 
 // Category CRUD
 admin.post("/categories", async (c) => {

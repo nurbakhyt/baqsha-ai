@@ -6,23 +6,10 @@ import cart from "./routes/cart";
 import orders from "./routes/orders";
 import adminRoutes from "./routes/admin";
 import copilot from "./routes/copilot";
-import { authMiddleware, adminGuard, AuthEnv } from "./middleware/auth";
+import { authMiddleware, adminGuard } from "./middleware/auth";
+import type { AppEnv } from "./types";
 
-type Bindings = {
-  DB: any;
-  CACHE: any;
-  IMAGES: any;
-  AI: any;
-  JWT_SECRET: string;
-  CORS_ORIGIN: string;
-};
-
-type Variables = {
-  user: any;
-  session: any;
-};
-
-const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+const app = new Hono<AppEnv>();
 
 // CORS
 app.use("*", cors({

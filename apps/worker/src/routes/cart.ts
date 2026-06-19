@@ -2,8 +2,9 @@ import { Hono } from "hono";
 import { CartRepository } from "../domain/repositories/cartRepository";
 import { ProductRepository } from "../domain/repositories/productRepository";
 import { CartItemSchema, CartItem } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const cart = new Hono();
+const cart = new Hono<AppEnv>();
 
 cart.get("/", async (c) => {
   const user = c.get("user");

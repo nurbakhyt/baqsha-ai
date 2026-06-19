@@ -2,8 +2,9 @@ import { Hono } from "hono";
 import { UserRepository } from "../domain/repositories/userRepository";
 import { SessionRepository } from "../domain/repositories/sessionRepository";
 import { RegisterInputSchema, LoginInputSchema } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const auth = new Hono();
+const auth = new Hono<AppEnv>();
 
 auth.post("/register", async (c) => {
   const body = await c.req.json();

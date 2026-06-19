@@ -1,9 +1,10 @@
 import { Hono } from "hono";
 import { OrderRepository } from "../domain/repositories/orderRepository";
-import { CartRepository } from "../domain/repositories/cartRepository";
-import { CreateOrderInputSchema, now, Order } from "@baqsha/shared";
+import { ProductRepository } from "../domain/repositories/productRepository";
+import { CreateOrderInputSchema, now } from "@baqsha/shared";
+import type { AppEnv } from "../types";
 
-const orders = new Hono();
+const orders = new Hono<AppEnv>();
 
 orders.post("/", async (c) => {
   const user = c.get("user");
@@ -21,23 +22,46 @@ orders.post("/", async (c) => {
     return c.json({ success: true, data: existingOrder });
   }
 
-  // Get cart
-  const cartRepo = new CartRepository(c.env.DB);
-  const cart = await cartRepo.getCart(user.id);
+  // Look up products from DB (never trust client prices)
+  const productRepo = new ProductRepository(c.env.DB);
+  const products = await productRepo.findByIds(input.data.items.map((i) => i.productId));
+  const productById = new Map(products.map((p) => [p.id, p]));
 
-  if (!cart.items.length) {
-    return c.json({ success: false, error: "Cart is empty" }, 400);
+  // Validate every item: product exists, active, in stock
+  for (const item of input.data.items) {
+    const product = productById.get(item.productId);
+    if (!product || !product.isActive) {
+      return c.json({
+        success: false,
+        error: "Product not found",
+        productId: item.productId,
+      }, 404);
+    }
+    if (product.stock < item.quantity) {
+      return c.json({
+        success: false,
+        error: "Insufficient stock",
+        productId: product.id,
+        name: product.name,
+        available: product.stock,
+      }, 409);
+    }
   }
 
-  // Create order items (snapshot) and calculate total
-  const orderItems = cart.items.map(item => ({
-    productId: item.productId,
-    name: item.name,
-    priceMinor: item.priceMinor,
-    quantity: item.quantity,
-    package: item.package,
-    unit: item.unit,
-  }));
+  // Build order snapshot from DB
+  const orderItems = input.data.items.map((item) => {
+    const product = productById.get(item.productId)!;
+    return {
+      productId: product.id,
+      name: product.name,
+      nameEn: product.nameEn,
+      nameKk: product.nameKk,
+      priceMinor: product.priceMinor,
+      quantity: item.quantity,
+      package: product.package,
+      unit: product.unit,
+    };
+  });
 
   const totalMinor = orderItems.reduce((sum, item) => sum + item.priceMinor * item.quantity, 0);
 
@@ -55,11 +79,8 @@ orders.post("/", async (c) => {
       createdAt: now(),
       updatedAt: now(),
     },
-    cart.items.map(item => ({ id: item.productId, qty: item.quantity }))
+    input.data.items.map((item) => ({ id: item.productId, qty: item.quantity }))
   );
-
-  // Clear cart
-  await cartRepo.clearCart(user.id);
 
   return c.json({ success: true, data: order }, 201);
 });
